@@ -45,57 +45,61 @@ var COUNTRIES = ["Afghanistan", "Albania", "Algeria ", "American Samoa ",
   "Wallis and Futuna ", "West Bank", "Western Sahara", "Yemen", "Zambia",
   "Zimbabwe"]
 
-var SearchItemInArray = function SearchItemInArray(items, input) {
-  if (input.trim() === '') {
-    return [];
-  }
-  var reg = new RegExp(input, "i");
+  var SearchItemInArray = function SearchItemInArray(items, input) {
+    if (input.trim() === '') {
+      return [];
+    }
+    var reg = new RegExp(input, "i");
 
-  return items.filter(function (item) {
-    if (reg.test(item)) {
-      return item;
+    return items.filter(function (item) {
+      if (reg.test(item)) {
+        return item;
+      }
+    });
+  };
+
+  var CountryTable = React.createClass({
+    render: function(){
+      return (
+        <table>
+        <tbody>
+        {window.results}
+        </tbody>
+        </table>
+      );
     }
   });
-};
 
-var CountryTable = React.createClass({
-  render: function(){
-    console.log(window.results);
-    return (
-      <table>
-      <tbody>
-      {window.results}
-      </tbody>
-      </table>
-    );
-  }
-});
-
-
-
-var SearchBar = React.createClass({
-  add: function(event){
-    if(event.target.value.length > 2){
-      window.results = SearchItemInArray(this.props.countries, event.target.value);
+  var SearchBar = React.createClass({
+    getInitialState: function() {
+      return {country: ''};
+    },
+    callback: function(event){
+      this.setState({country: event.target.value});
+      console.log(this.state.country);
+    },
+    render: function(){
+      return(
+        <div> Enter country name :
+          <input type="text" id="country" onChange={this.callback} name="country" value={this.state ? this.state.country : ""} />
+          </div>
+      );
     }
-  },
-  render: function(){
-    return(
-      <div> Enter country name :
-        <input type="text" id="country" onKeyUp={this.add} />
-        </div>
-    );
-  }
-});
+  });
 
-var FilterableCountryTable = React.createClass({
-  render: function(){
-    return (
-      <div>
-      <SearchBar countries={this.props.countries} />
-      <CountryTable />
-      </div>
-    );
-  }
-});
-ReactDOM.render(<FilterableCountryTable countries={COUNTRIES}/>, document.getElementById('container'));
+  var FilterableCountryTable = React.createClass({
+    add: function(event){
+      if((event.target.value) && (event.target.value.length > 2)){
+        this.props.names = SearchItemInArray(this.props.countries, event.target.value);
+      }
+    },
+    render: function(){
+      return (
+        <div>
+        <SearchBar callback={this.add} />
+        <CountryTable />
+        </div>
+      );
+    }
+  });
+  ReactDOM.render(<FilterableCountryTable countries={COUNTRIES}/>, document.getElementById('container'));
