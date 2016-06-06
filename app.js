@@ -77,6 +77,7 @@ var COUNTRIES = ["Afghanistan", "Albania", "Algeria ", "American Samoa ",
     callback: function(event){
       this.setState({country: event.target.value});
       console.log(this.state.country);
+      this.props.call_add(event);
     },
     render: function(){
       return(
@@ -90,16 +91,17 @@ var COUNTRIES = ["Afghanistan", "Albania", "Algeria ", "American Samoa ",
   var FilterableCountryTable = React.createClass({
     add: function(event){
       if((event.target.value) && (event.target.value.length > 2)){
+        console.log(SearchItemInArray(this.props.countries, event.target.value));
         this.props.names = SearchItemInArray(this.props.countries, event.target.value);
       }
     },
     render: function(){
       return (
         <div>
-        <SearchBar callback={this.add} />
+        <SearchBar call_add={this.add}/>
         <CountryTable />
         </div>
       );
     }
   });
-  ReactDOM.render(<FilterableCountryTable countries={COUNTRIES}/>, document.getElementById('container'));
+  ReactDOM.render(<FilterableCountryTable countries={COUNTRIES} />, document.getElementById('container'));
