@@ -59,13 +59,39 @@ var COUNTRIES = ["Afghanistan", "Albania", "Algeria ", "American Samoa ",
   };
 
   var CountryTable = React.createClass({
+    autoComplete: function(event){
+      alert("clicked");
+      console.log(event.target.value);
+    },
+    clickEvent: function(event){
+      alert("Clickced");
+    },
     render: function(){
       console.log(this.props.names);
+      var n = this.props.names ? this.props.names : [""]
+      var auto = this.props.autoComplete ? this.props.autoComplete : ""
       return (
         <div>
         {this.props.names}
+        {this.props.names.length}
+        <table border="5">
+        <tbody>
+        {n.map(function(name){
+          return (
+            <tr>
+            <td>
+            {name}
+            </td>
+            <td><button onClick={auto}>Select</button>
+            </td>
+            </tr>
+          )
+        })}
+        </tbody>
+        </table>
+
         </div>
-      );
+      )
     }
   });
 
