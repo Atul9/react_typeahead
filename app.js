@@ -60,46 +60,47 @@ var COUNTRIES = ["Afghanistan", "Albania", "Algeria ", "American Samoa ",
 
   var CountryTable = React.createClass({
     render: function(){
+      console.log(this.props.names);
       return (
-        <table>
-        <tbody>
-        {window.results}
-        </tbody>
-        </table>
+        <div>
+        {this.props.names}
+        </div>
       );
     }
   });
 
   var SearchBar = React.createClass({
+    handleChange: function(event){
+      var countryName = event.target.value
+      this.setState({country: event.target.value});
+      if((countryName) && (countryName.length > 2)){
+        this.props.search(countryName);
+      }
+    },
     getInitialState: function() {
       return {country: ''};
-    },
-    callback: function(event){
-      this.setState({country: event.target.value});
-      console.log(this.state.country);
-      this.props.call_add(event);
     },
     render: function(){
       return(
         <div> Enter country name :
-          <input type="text" id="country" onChange={this.callback} name="country" value={this.state ? this.state.country : ""} />
+          <input type="text" id="country" onChange={this.handleChange} name="country" value={this.state.country} />
           </div>
       );
     }
   });
 
   var FilterableCountryTable = React.createClass({
-    add: function(event){
-      if((event.target.value) && (event.target.value.length > 2)){
-        console.log(SearchItemInArray(this.props.countries, event.target.value));
-        this.props.names = SearchItemInArray(this.props.countries, event.target.value);
-      }
+    getInitialState: function () {
+      return {results: ""}
+    },
+    filterCountries: function(countryName){
+      this.setState({results: SearchItemInArray(this.props.countries, countryName)});
     },
     render: function(){
       return (
         <div>
-        <SearchBar call_add={this.add}/>
-        <CountryTable />
+        <SearchBar search={this.filterCountries}/>
+        <CountryTable names={this.state.results}/>
         </div>
       );
     }
