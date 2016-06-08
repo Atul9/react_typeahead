@@ -96,13 +96,21 @@ var COUNTRIES = ["Afghanistan", "Albania", "Algeria ", "American Samoa ",
         this.props.search(countryName);
       }
     },
+
     getInitialState: function() {
       return {country: ''};
     },
+
+    componentWillReceiveProps: function(nextProps) {
+      if(nextProps.selectedCountryName != this.props.selectedCountryName) {
+        this.setState({country: nextProps.selectedCountryName});
+      }
+    },
+
     render: function(){
       return(
         <div> Enter country name :
-          <input type="text" id="country" onChange={this.handleChange} name="country" value={this.props.selectedCountryName ? this.props.selectedCountryName : this.state.country} />
+          <input type="text" id="country" onChange={this.handleChange} name="country" value={this.state.country} />
         </div>
       );
     }
