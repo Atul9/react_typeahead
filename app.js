@@ -59,34 +59,30 @@ var COUNTRIES = ["Afghanistan", "Albania", "Algeria ", "American Samoa ",
   };
 
   var CountryTable = React.createClass({
-    autoComplete: function(event){
-      alert("clicked");
-      console.log(event.target.value);
-    },
-    clickEvent: function(event){
-      alert("Clickced");
+    handleButtonClick: function(name){
+      return function(event){
+        this.props.setSelectedCountry(name);
+      }.bind(this);
     },
     render: function(){
       console.log(this.props.names);
-      var n = this.props.names ? this.props.names : [""]
-      var auto = this.props.autoComplete ? this.props.autoComplete : ""
       return (
         <div>
         {this.props.names}
         {this.props.names.length}
         <table border="5">
         <tbody>
-        {n.map(function(name){
+        {this.props.names.map(function(name){
           return (
             <tr>
             <td>
             {name}
             </td>
-            <td><button onClick={auto}>Select</button>
+            <td><button onClick={this.handleButtonClick(name)}>Select</button>
             </td>
             </tr>
           )
-        })}
+        }.bind(this))}
         </tbody>
         </table>
 
@@ -117,16 +113,20 @@ var COUNTRIES = ["Afghanistan", "Albania", "Algeria ", "American Samoa ",
 
   var FilterableCountryTable = React.createClass({
     getInitialState: function () {
-      return {results: ""}
+      return {results: []}
     },
     filterCountries: function(countryName){
       this.setState({results: SearchItemInArray(this.props.countries, countryName)});
     },
+    setSelectedCountry: function(country){
+      debugger;
+      this.setState({selectedCountryName: country});
+    },
     render: function(){
       return (
         <div>
-        <SearchBar search={this.filterCountries}/>
-        <CountryTable names={this.state.results}/>
+        <SearchBar search={this.filterCountries} selectedCountryName={this.state.selectedCountryName}/>
+        <CountryTable names={this.state.results} setSelectedCountry={this.setSelectedCountry}/>
         </div>
       );
     }
