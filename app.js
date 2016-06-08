@@ -65,11 +65,8 @@ var COUNTRIES = ["Afghanistan", "Albania", "Algeria ", "American Samoa ",
       }.bind(this);
     },
     render: function(){
-      console.log(this.props.names);
       return (
         <div>
-        {this.props.names}
-        {this.props.names.length}
         <table border="5">
         <tbody>
         {this.props.names.map(function(name){
@@ -105,8 +102,8 @@ var COUNTRIES = ["Afghanistan", "Albania", "Algeria ", "American Samoa ",
     render: function(){
       return(
         <div> Enter country name :
-          <input type="text" id="country" onChange={this.handleChange} name="country" value={this.state.country} />
-          </div>
+          <input type="text" id="country" onChange={this.handleChange} name="country" value={this.props.selectedCountryName ? this.props.selectedCountryName : this.state.country} />
+        </div>
       );
     }
   });
@@ -119,7 +116,6 @@ var COUNTRIES = ["Afghanistan", "Albania", "Algeria ", "American Samoa ",
       this.setState({results: SearchItemInArray(this.props.countries, countryName)});
     },
     setSelectedCountry: function(country){
-      debugger;
       this.setState({selectedCountryName: country});
     },
     render: function(){
